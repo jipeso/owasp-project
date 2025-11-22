@@ -1,0 +1,30 @@
+{% extends 'polls/base.html' %}
+
+{% block content %}
+
+<h1>{{ poll.question }}</h1>
+<p>created by: {{ poll.creator }}</p>
+
+{% if user_voted %}
+    <h2>Votes</h2>
+    {% for choice in poll.choices.all %}
+        <p>
+            {{ choice.text }} - {{ choice.votes }}
+        </p>
+    {% endfor %}
+{% else %}
+  <form method="post" action="{% url 'vote' poll.id %}">
+    {% csrf_token %}
+    {% for choice in poll.choices.all %}
+      <div>
+        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+        <label for="choice{{ forloop.counter }}">{{ choice.text }}</label>
+      </div>
+    {% endfor %}
+    <button type="submit">Vote</button>
+  </form>
+{% endif %}
+
+<a href="{% url 'delete_poll' poll.id %}">delete poll</a>
+
+{% endblock %}

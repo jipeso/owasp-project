@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Poll App{% endblock %}</title>
+  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+</head>
+<body>
+
+  <header>
+    <h1>Poll App</h1>
+
+    <nav>
+      <a href="{% url 'poll_list' %}">Polls</a>
+      <a href="{% url 'create_poll' %}">Create Poll</a>
+      <a href="{% url 'search_polls' %}">Search Polls</a>
+
+      {% if user.is_authenticated %}
+        <span> logged in as {{ user.username }}</span>
+
+        <form action="{% url 'logout' %}" method="post" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit"submit>Logout</button>
+        </form>
+      {% else %}
+        <a href="{% url 'login' %}">Login</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+</body>
+</html>
