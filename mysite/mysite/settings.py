@@ -29,9 +29,9 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 # Fix for A05:2021 Security Misconfiguration
-# DEBUG = os.getenv('DEBUG')
-# SECRET_KEY = os.getenv('SECRET_KEY')
-# ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS')
+# DEBUG = os.environ['DEBUG']
+# SECRET_KEY = os.environ['SECRET_KEY']
+# ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS']
 
 # Application definition
 
@@ -129,3 +129,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'poll_list'
 LOGOUT_REDIRECT_URL = 'login'
+
+# FIX for A07:2021 Identification and Authentication Failures 
+# SESSION_COOKIE_AGE = 60 * 30  # 30 minutes
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = True

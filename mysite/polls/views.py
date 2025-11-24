@@ -1,10 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db import connection
+from django.contrib import messages
 from django.http import HttpResponse, HttpResponseForbidden
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from .models import Poll, Choice, Vote
 
+@login_required
 def poll_details(request, poll_id):
   poll = get_object_or_404(Poll, pk=poll_id)
   user_voted = False
@@ -25,6 +27,7 @@ def poll_list(request):
   polls = Poll.objects.all()
   return render(request, 'polls/polls.html', {'polls': polls})
 
+@login_required
 def search_polls(request):
   query = request.GET.get('query')
   results = []
@@ -33,13 +36,12 @@ def search_polls(request):
     cursor = connection.cursor()
 
     # Fix for A03:2021 SQL Injection
-    # sql = f"SELECT * FROM polls_poll WHERE question LIKE ?"
-    # cursor.execute(sql, ['%' + query + '%])
+    # sql = f"SELECT * FROM polls_poll WHERE question LIKE %s"
+    # cursor.execute(sql, ['%' + query + '%'])
 
     sql = f"SELECT * FROM polls_poll WHERE question LIKE '%{query}%'"
     cursor.execute(sql)
 
-    print(results)
     rows = cursor.fetchall()
 
     for row in rows:
@@ -53,8 +55,9 @@ def delete_poll(request, poll_id):
   poll = get_object_or_404(Poll, pk=poll_id)
 
   # Fix for A01:2021 Broken Access Control
-  # if poll.creator != request.user:
-    # return HttpResponseForbidden("Cannot delete polls created by others!")
+  # if poll.creator != request.user.username:
+    # messages.error(request, "Cannot delete polls created by others!")
+    # return redirect('poll_details', poll_id=poll_id)
 
   poll.delete()
   return redirect('poll_list')
@@ -67,7 +70,7 @@ def create_poll(request):
     creator = request.POST.get('creator')
 
     # Fix for A04:2021 Insecure Design
-    # creator = request.user
+    # creator = request.user.username
 
     poll = Poll.objects.create(question=question, creator=creator)
 

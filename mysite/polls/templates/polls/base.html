@@ -29,6 +29,15 @@
   </header>
 
   <main>
+    {% if messages %}
+      <div>
+          {% for message in messages %}
+              <div class="alert">
+                  {{ message }}
+              </div>
+          {% endfor %}
+      </div>
+    {% endif %}
     {% block content %}{% endblock %}
   </main>
 
