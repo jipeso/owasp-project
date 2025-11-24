@@ -130,6 +130,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'poll_list'
 LOGOUT_REDIRECT_URL = 'login'
 
+# Django defaults for the project report:
+# SESSION_COOKIE_AGE = 1209600
+# source: https://docs.djangoproject.com/en/5.2/ref/settings/#session-cookie-age
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+# source: https://docs.djangoproject.com/en/5.2/ref/settings/#session-expire-at-browser-close
+
 # FIX for A07:2021 Identification and Authentication Failures 
 # SESSION_COOKIE_AGE = 60 * 30  # 30 minutes
 # SESSION_EXPIRE_AT_BROWSER_CLOSE = True
